@@ -1,9 +1,9 @@
-import 'package:conversation/auth/login_page.dart';
+
 import 'package:conversation/helper/helper_function.dart';
-import 'package:conversation/home_page.dart';
+import 'package:conversation/pages/auth/login_page.dart';
+import 'package:conversation/pages/home_page.dart';
 import 'package:conversation/shared/constant.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:conversation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 void main() async{

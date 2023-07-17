@@ -1,14 +1,16 @@
 import 'dart:ui';
 
-import 'package:conversation/auth/login_page.dart';
-import 'package:conversation/helper/helper_function.dart';
 
-import 'package:conversation/home_page.dart';
+import 'package:conversation/helper/helper_function.dart';
+import 'package:conversation/pages/auth/login_page.dart';
+
+import 'package:conversation/pages/home_page.dart';
 import 'package:conversation/service/auth_service.dart';
+import 'package:conversation/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/widgets.dart';
+
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

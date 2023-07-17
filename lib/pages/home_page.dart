@@ -1,6 +1,7 @@
-import 'package:conversation/auth/login_page.dart';
-import 'package:conversation/auth/register_page.dart';
-import 'package:conversation/group_tile.dart';
+
+import 'package:conversation/pages/auth/login_page.dart';
+import 'package:conversation/pages/auth/register_page.dart';
+import 'package:conversation/pages/group_tile.dart';
 import 'package:conversation/helper/helper_function.dart';
 import 'package:conversation/service/database_service.dart';
 import 'package:conversation/widgets/widgets.dart';
