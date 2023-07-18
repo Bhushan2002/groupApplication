@@ -76,11 +76,11 @@ class _GroupInfoState extends State<GroupInfo> {
                     color: Colors.white),
               ),
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             Center(
               child: Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(20),
+                padding: const  EdgeInsets.all(20),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     color: Theme.of(context).primaryColor.withOpacity(0.2)),

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class DatabaseService {
   final String? uId;
 
-  DatabaseService({required this.uId});
+  DatabaseService({this.uId});
 
   //reference for our collection
   final CollectionReference userCollection =
@@ -37,8 +37,8 @@ class DatabaseService {
 //creating a group
   Future createGroup(String userName, String id, String groupName) async {
     DocumentReference groupDocumentReference = await groupCollection.add({
-      "GroupName": groupName,
-      "GroupIcon": "",
+      "groupName": groupName,
+      "groupIcon": "",
       "admin": "${id}_$userName",
       "member": [],
       "groupId": "",
@@ -76,4 +76,21 @@ class DatabaseService {
 getGroupMember(String groupId)async{
     return groupCollection.doc(groupId).snapshots();
 }
+//search
+
+searchByName(String groupName){
+    return groupCollection.where("groupName", isEqualTo: groupName).get();
+}
+Future<bool> isUserJoined(String groupName, String groupId,String userName)async{
+    DocumentReference userDocumentReference = userCollection.doc(uId);
+    DocumentSnapshot documentSnapshot = await userDocumentReference.get();
+    List<dynamic> groups = await documentSnapshot['groups'];
+    if(groups.contains("${groupId}_${groupName}")){
+      return true;
+    }
+    else{
+      return false;
+    }
+}
+
 }
