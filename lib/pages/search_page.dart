@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conversation/helper/helper_function.dart';
+import 'package:conversation/pages/chat_page.dart';
 import 'package:conversation/pages/home_page.dart';
 import 'package:conversation/service/database_service.dart';
 import 'package:conversation/widgets/widgets.dart';
@@ -25,6 +26,7 @@ class _SearchPageState extends State<SearchPage> {
   String getName(String res) {
     return res.substring(res.indexOf("_") + 1);
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -98,8 +100,9 @@ class _SearchPageState extends State<SearchPage> {
           isLoading
               ? Center(
                   child: CircularProgressIndicator(
-                  color: Theme.of(context).primaryColor,
-                ),)
+                    color: Theme.of(context).primaryColor,
+                  ),
+                )
               : Expanded(child: groupList()),
         ],
       ),
@@ -126,17 +129,17 @@ class _SearchPageState extends State<SearchPage> {
   groupList() {
     return hasUserSearched
         ? ListView.builder(
-      shrinkWrap: true,
-      itemCount: searchSnapshot!.docs.length,
-      itemBuilder: (context, index) {
-        return groupTile(
-          userName,
-          searchSnapshot!.docs[index]['groupId'],
-          searchSnapshot!.docs[index]['groupName'],
-          searchSnapshot!.docs[index]['admin'],
-        );
-      },
-    )
+            shrinkWrap: true,
+            itemCount: searchSnapshot!.docs.length,
+            itemBuilder: (context, index) {
+              return groupTile(
+                userName,
+                searchSnapshot!.docs[index]['groupId'],
+                searchSnapshot!.docs[index]['groupName'],
+                searchSnapshot!.docs[index]['admin'],
+              );
+            },
+          )
         : Container();
   }
 
@@ -156,26 +159,87 @@ class _SearchPageState extends State<SearchPage> {
     // function to check whether user already exists in group.
     joinedOrNot(userName, groupId, groupName, admin);
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       leading: GestureDetector(
-        onTap: (){
-          nextScreen(context, HomePage());
+        onTap: () {
+          nextScreen(context, const HomePage());
         },
         child: CircleAvatar(
           radius: 30,
           backgroundColor: Theme.of(context).primaryColor,
           child: Text(
             userName.substring(0, 1).toUpperCase(),
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),
           ),
-
         ),
       ),
+      title: Text(
+        groupName,
+        style: const TextStyle(fontWeight: FontWeight.w600),
+      ),
       subtitle: Text(getName(admin)),
+      trailing: InkWell(
+        onTap: () async {
+          await DatabaseService(uId: user!.uid)
+              .toggleGroup(groupId, userName, groupName)
+              .then((value) {
+            if (isJoined) {
+              setState(() {
+                isJoined = !isJoined;
+                showSnackBar(
+                    context, Colors.red, 'Successfully joined the group.');
+              });
+
+              Future.delayed(const Duration(seconds: 2), () {
+                nextScreen(
+                    context,
+                    ChatPage(
+                        groupName: groupName,
+                        groupId: groupId,
+                        userName: userName));
+              });
+            } else {
+              setState(() {
+                isJoined = !isJoined;
+                showSnackBar(context, Colors.red, "Left the group $groupName");
+              });
+            }
+          });
+        },
+        child: isJoined
+            ? Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.black.withOpacity(0.3),
+                    border: Border.all(color: Colors.white, width: 1)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: const Text(
+                  'Joined',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            : Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.black.withOpacity(0.4),
+                    border: Border.all(color: Colors.white, width: 1)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: const Text(
+                  'Join Now',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+      ),
     );
   }
 }
