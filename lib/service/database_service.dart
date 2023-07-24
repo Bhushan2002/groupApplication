@@ -99,10 +99,10 @@ class DatabaseService {
 
   Future toggleGroup(String groupId, String userName, String groupName) async {
     DocumentReference userDocumentReference = userCollection.doc(uId);
-    DocumentReference groupDocumentReference = groupCollection.doc(uId);
+    DocumentReference groupDocumentReference = groupCollection.doc(groupId);
 
     DocumentSnapshot documentSnapshot = await userDocumentReference.get();
-    List<dynamic> groups = await documentSnapshot['groups'];
+    List groups = await documentSnapshot['groups'];
 
     //if user has our group -> then remove them or also in other part re-join
     if (groups.contains("${groupId}_$groupName")) {
