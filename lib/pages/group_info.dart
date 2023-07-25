@@ -1,5 +1,10 @@
+import 'package:conversation/pages/auth/login_page.dart';
+import 'package:conversation/pages/auth/register_page.dart';
+import 'package:conversation/pages/home_page.dart';
 import 'package:conversation/service/database_service.dart';
+import 'package:conversation/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +62,47 @@ class _GroupInfoState extends State<GroupInfo> {
           style: TextStyle(fontSize: 24),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.exit_to_app))
+          IconButton(
+              onPressed: () {
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: const Text('Are you sure you exit the group?'),
+                        title: const Text('Exit'),
+                        actions: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.cancel,
+                              color: Colors.red,
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: () async {
+                                DatabaseService(
+                                        uId: FirebaseAuth
+                                            .instance.currentUser!.uid)
+                                    .toggleGroup(
+                                        widget.groupId,
+                                        getName(widget.adminName),
+                                        widget.groupName)
+                                    .whenComplete(() {
+                                  nextScreenReplace(context, const HomePage());
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.done,
+                                color: Colors.green,
+                              ))
+                        ],
+                      );
+                    });
+              },
+              icon: const Icon(Icons.exit_to_app))
         ],
       ),
       body: Container(
@@ -68,7 +113,8 @@ class _GroupInfoState extends State<GroupInfo> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundColor: Theme.of(context).primaryColor.withOpacity(0.7),
+                backgroundColor:
+                    Theme.of(context).primaryColor.withOpacity(0.7),
                 radius: 60,
                 child: Text(
                   widget.groupName.substring(0, 1).toUpperCase(),
@@ -93,13 +139,13 @@ class _GroupInfoState extends State<GroupInfo> {
                     children: [
                       Text(
                         widget.groupName,
-                        style:
-                            const TextStyle(fontSize: 29, color: Colors.black45),
+                        style: const TextStyle(
+                            fontSize: 29, color: Colors.black45),
                       ),
                       Text(
                         "Admin: ${getName(widget.adminName)}",
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.black26),
+                        style: const TextStyle(
+                            fontSize: 16, color: Colors.black26),
                       ),
                     ],
                   ),
@@ -125,7 +171,6 @@ class _GroupInfoState extends State<GroupInfo> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return Container(
-
                         padding: const EdgeInsets.symmetric(
                             horizontal: 5, vertical: 10),
                         child: ListTile(
