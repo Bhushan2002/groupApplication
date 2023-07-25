@@ -96,7 +96,7 @@ class _ChatPageState extends State<ChatPage> {
                   width: 12,
                 ),
                 Container(
-                  child: Icon(Icons.attach_file,size: 24,color: Colors.white,),
+                  child: const Icon(Icons.attach_file,size: 24,color: Colors.white,),
                 ),
                 GestureDetector(
                   onTap: () {
