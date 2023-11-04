@@ -21,7 +21,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  late Stream<QuerySnapshot> chat;
+  Stream<QuerySnapshot>? chat;
   String admin = "";
   TextEditingController messageController = TextEditingController();
   @override
@@ -129,8 +129,6 @@ class _ChatPageState extends State<ChatPage> {
       builder: (context, AsyncSnapshot snapshot) {
         return snapshot.hasData
             ? ListView.builder(
-          reverse: true,
-          
           itemCount: snapshot.data.docs.length,
           itemBuilder: (context, index) {
             return MessageTile(
